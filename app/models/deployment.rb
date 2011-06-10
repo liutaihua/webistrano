@@ -8,7 +8,7 @@ class Deployment < ActiveRecord::Base
   
   serialize :excluded_host_ids
   
-  attr_accessible :task, :prompt_config, :description, :excluded_host_ids, :override_locking, :iplist
+  attr_accessible :task, :prompt_config, :description, :excluded_host_ids, :override_locking
     
   # given configuration hash on create in order to satisfy prompt configurations
   attr_accessor :prompt_config
@@ -24,7 +24,7 @@ class Deployment < ActiveRecord::Base
   STATUS_SUCCESS  = "success"
   STATUS_RUNNING  = "running"
   STATUS_VALUES   = [STATUS_SUCCESS, STATUS_FAILED, STATUS_CANCELED, STATUS_RUNNING]
-
+  
   validates_inclusion_of :status, :in => STATUS_VALUES
     
   # check (on on creation ) that the stage is ready
@@ -109,7 +109,7 @@ class Deployment < ActiveRecord::Base
 
   def complete_with_error!
     save_completed_status!(STATUS_FAILED)
-    #notify_per_mail
+    notify_per_mail
   end
   
   def complete_successfully!
@@ -119,7 +119,7 @@ class Deployment < ActiveRecord::Base
   
   def complete_canceled!
     save_completed_status!(STATUS_CANCELED)
-    #notify_per_mail
+    notify_per_mail
   end
   
   # deploy through Webistrano::Deployer in background (== other process)
@@ -133,7 +133,7 @@ class Deployment < ActiveRecord::Base
   
   # returns an unsaved, new deployment with the same task/stage/description
   def repeat
-    returning Deployment.new do |d|
+    Deployment.new.tap do |d|
       d.stage = self.stage
       d.task = self.task
       d.description = "Repetition of deployment #{self.id}: \n" 
@@ -193,13 +193,6 @@ class Deployment < ActiveRecord::Base
     self.errors.instance_variable_get("@errors").delete('lock')
   end
   
-  def get_iplist
-      t = self.roles.dup.delete_if{|role| self.excluded_hosts.include?(role.host) }
-      t.map {|r|r.host.content}.join("\r\n").gsub("\r\n", ' ') unless t.blank?
-      rescue
-       'err in get_iplist'
-  end
-
   protected
   def ensure_not_all_hosts_excluded
     unless self.stage.blank? || self.excluded_host_ids.blank?
@@ -225,5 +218,4 @@ class Deployment < ActiveRecord::Base
       Notification.deliver_deployment(self, email)
     end
   end
-
 end

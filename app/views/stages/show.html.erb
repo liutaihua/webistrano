@@ -27,14 +27,6 @@
 	    <b>Name:</b>
 		   <%=h @stage.name %>
 		</p>
-	  <p>
-	    <b>demander:</b>
-		   <%=h @stage.demander %>
-		</p>
-	  <p>
-	    <b>task-sn:</b>
-		   <%=h @stage.task_sn %>
-		</p>
 		<p>
 		  <b>Project:</b>
 		  <%= link_to h(@stage.project.name), project_url(current_project) %>

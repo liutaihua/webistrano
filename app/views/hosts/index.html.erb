@@ -1,7 +1,7 @@
 <h2>Hosts</h2>
 
 <fieldset class="fieldset">
-  <legend> <%=h pluralize(current_project ? current_project.host_ids.length : 0, 'Host')%> listed</legend>
+  <legend> <%=h pluralize(Host.count, 'Host')%> listed</legend>
 
 <table class="sortable">
   <tr>
@@ -9,7 +9,6 @@
     <th width="33%">#Stages</th>
     <th width="33%">#Roles</th>
   </tr>
-	<% if @hosts %>
   <% for host in @hosts %>
     <tr class="<%= cycle :even, :odd  %>">
       <td><%= link_to h(host.name), host_path(host) %></td>
@@ -20,7 +19,6 @@
         <td><%= link_to 'Delete', host_path(host), :confirm => 'Are you sure?', :method => :delete %></td>
       <% end %>
     </tr>
-	<% end %>
   <% end %>
 </table>
 

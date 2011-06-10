@@ -73,6 +73,6 @@ class RolesController < ApplicationController
   
   protected
   def load_host_choices
-    @host_choices = current_project.hosts.find(:all, :order => "name ASC").collect {|h| [ h.name, h.id ] }
+    @host_choices = Host.find(:all, :order => "name ASC").collect {|h| [ h.name, h.id ] }
   end
 end

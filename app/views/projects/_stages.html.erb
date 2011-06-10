@@ -6,14 +6,12 @@
   <table class="sortable">
     <tr>
       <th width="34%">Name</th>
-      <th width="60%">Desc</th>
-      <th width="3%">#Hosts</th>
-      <th width="3%">#Deployments</th>
+      <th width="33%">#Hosts</th>
+      <th width="33%">#Deployments</th>
     </tr>
   <% for stage in @project.stages %>
     <tr class="<%= cycle :even, :odd, :name => 'stages' %>">
       <td><%= link_to h(stage.name), project_stage_path(@project, stage) %></td>
-      <td><%=h stage.descrips  %></td>
       <td><%=h stage.hosts.count  %></td>
       <td><%=h stage.deployments.count  %></td>
       <td><%= link_to 'Edit', edit_project_stage_path(@project, stage) %></td>

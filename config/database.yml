@@ -1,0 +1,42 @@
+# MySQL (default setup).  Versions 4.1 and 5.0 are recommended.
+#
+# Install the MySQL driver:
+#   gem install mysql
+# On MacOS X:
+#   gem install mysql -- --include=/usr/local/lib
+# On Windows:
+#   gem install mysql
+#       Choose the win32 build.
+#       Install MySQL and put its /bin directory on your path.
+#
+# And be sure to use new-style password hashing:
+#   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
+development:
+  adapter: mysql
+  database: webistrano_development
+  username: webistrano
+  password: f17f40fd16bb3b0b8fc8498749ad3565
+  socket: /tmp/mysql.sock
+
+# Warning: The database defined as 'test' will be erased and
+# re-generated from your development database when you run 'rake'.
+# Do not set this db to the same as development or production.
+test:
+  adapter: mysql
+  database: webistrano_test
+  username: webistrano
+  password: f17f40fd16bb3b0b8fc8498749ad3565
+  socket: /tmp/mysql.sock
+
+production:
+  adapter: mysql
+  database: webistrano_production
+  username: root
+  password: root
+  #socket: /var/run/mysqld/mysqld.sock
+  host: 10.127.26.241
+  port: 3306
+  encoding: utf8
+  pool: 100
+  timeout: 20000
+

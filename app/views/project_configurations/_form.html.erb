@@ -12,14 +12,13 @@
 	  </td>
 	</tr>
 	<tr>
-	  <td colspan="3">
+	  <td>
         <% disabled = @configuration.prompt? ? {:disabled =>'disabled'} : {} %>
-        <%= text_area 'configuration', 'value', disabled.merge(:style =>'width: 650px;height: 300px') %>
+        <%= text_field 'configuration', 'value', disabled.merge(:style =>'width: 330px') %>
       </td>
-	</tr>
-	<tr>
-      <td valign="bottom" colspan="3">
-		<b>or</b> <%= check_box 'configuration', 'prompt_on_deploy', :style =>'' %>
+      <td style="padding:0px;">&nbsp;<b>or</b>&nbsp;</td>
+      <td valign="bottom">
+		<%= check_box 'configuration', 'prompt_on_deploy', :style =>'' %>
         Prompt for value on deployment
       </td>
     </tr>

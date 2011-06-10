@@ -1,18 +1,10 @@
 <% flashed_errors(:host) %>
 
 <% form_for(:host, :url => host_path(@host), :html => { :method => :put }) do |f| %>
- 
-    <p>
-    <b>Host_List_Name</b><br />
+  <p>
+    <b>Name (DNS name or IP address)</b><br />
     <%= f.text_field :name, :style => 'width: 330px' %>
   </p>
-  <p>
-    <b>Ip_list (DNS name or IP address)</b><br />
-    <%= f.text_area :content, :style => 'width: 330px;height: 200px' %>
-  </p>
-
-  
-  
 
   <%= link_to 'Back to host', host_path(@host), :class => 'arrow_link ontheright', :style => 'margin-right: 330px' %>
 

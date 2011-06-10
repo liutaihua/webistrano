@@ -1,9 +1,9 @@
 <div id="hosts_open_content" style="<%=h show_if_opened(status) %>">
-  <% if current_project && (hosts = current_project.hosts).length > 0 %>
-    <% for host in hosts %>
+  <% if Host.count > 0 %>
+    <% for host in Host.find(:all, :order => "name ASC") %>
       <a href="<%= host_path(host) %>" class="menu_link <%=h active_link_class(host) %>" title="<%=h host.name %>">
   	    <div class="menu_link_title">
-  	      <%=h host.name + " (#{host.ipcnt})" %>
+  	      <%=h host.name %>
   	    </div>
       </a>
     <% end %>
@@ -19,7 +19,7 @@
 <div id="hosts_closed_content" style="<%=h show_if_closed(status) %>">
   <a href="javascript:open_menu_box('hosts')" class="menu_link  menu_link_create">
 	  <div class="menu_link_title">
-	    <%=h pluralize(current_project ? current_project.host_ids.length : 0, 'host')%>
+	    <%=h pluralize(Host.count, 'host')%>
 	  </div>
   </a>
 </div>  

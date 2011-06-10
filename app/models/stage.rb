@@ -34,14 +34,11 @@ class Stage < ActiveRecord::Base
   
   # wrapper around alert_emails, returns an array of email addresses
   def emails
-    (self.alert_emails.blank? ? [] : self.alert_emails.split(" ")) | ['zhoukeze@snda.com']
-=begin    
     if self.alert_emails.blank?
       []
     else
       self.alert_emails.split(" ")
     end
-=end
   end
   
   # returns an array of ConfigurationParameters that is a result of the projects configuration overridden by the stage config 
@@ -112,7 +109,7 @@ class Stage < ActiveRecord::Base
     end
   end
   
-  def recent_deployments(limit=10)
+  def recent_deployments(limit=3)
     self.deployments.find(:all, :limit => limit, :order => 'deployments.created_at DESC')
   end
   
@@ -128,7 +125,8 @@ class Stage < ActiveRecord::Base
     deployer = Webistrano::Deployer.new(d)
     begin
       deployer.list_tasks.collect { |t| {:name => t.fully_qualified_name, :description => t.description} }.delete_if{|t| t[:name] == 'shell' || t[:name] == 'invoke'}
-    rescue
+    rescue Exception => e
+      RAILS_DEFAULT_LOGGER.error("Problem listing tasks of stage #{id}: #{e} - #{e.backtrace.join("\n")} ")
       [{:name => "Error", :description => "Could not load tasks - syntax error in recipe definition?"}]
     end
   end

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090319185505) do
+ActiveRecord::Schema.define(:version => 20110512144542) do
 
   create_table "configuration_parameters", :force => true do |t|
     t.string   "name"
@@ -37,6 +37,9 @@ ActiveRecord::Schema.define(:version => 20090319185505) do
     t.string   "status",            :default => "running"
   end
 
+  add_index "deployments", ["stage_id"], :name => "index_deployments_on_stage_id"
+  add_index "deployments", ["user_id"], :name => "index_deployments_on_user_id"
+
   create_table "deployments_roles", :id => false, :force => true do |t|
     t.integer "deployment_id"
     t.integer "role_id"
@@ -46,8 +49,6 @@ ActiveRecord::Schema.define(:version => 20090319185505) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "content"
-    t.integer  "ipcnt",      :default => 0
   end
 
   create_table "project_configurations", :force => true do |t|
@@ -59,11 +60,6 @@ ActiveRecord::Schema.define(:version => 20090319185505) do
     t.string   "template"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "projects_users", :id => false, :force => true do |t|
-    t.integer "project_id"
-    t.integer "user_id"
   end
 
   create_table "recipe_versions", :force => true do |t|
@@ -102,6 +98,9 @@ ActiveRecord::Schema.define(:version => 20090319185505) do
     t.integer  "no_symlink", :default => 0
   end
 
+  add_index "roles", ["host_id"], :name => "index_roles_on_host_id"
+  add_index "roles", ["stage_id"], :name => "index_roles_on_stage_id"
+
   create_table "stage_configurations", :force => true do |t|
   end
 
@@ -114,6 +113,8 @@ ActiveRecord::Schema.define(:version => 20090319185505) do
     t.integer  "locked_by_deployment_id"
     t.integer  "locked",                  :default => 0
   end
+
+  add_index "stages", ["project_id"], :name => "index_stages_on_project_id"
 
   create_table "users", :force => true do |t|
     t.string   "login"

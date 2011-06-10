@@ -2,22 +2,18 @@ class Host < ActiveRecord::Base
   has_many :roles, :dependent => :destroy, :uniq => true
   has_many :stages, :through => :roles, :uniq => true # XXX uniq does not seem to work! You get all stages, even doubles
   
-  #validates_uniqueness_of :name
-  validates_uniqueness_of :name, :scope => :project_id
-
+  validates_uniqueness_of :name
+  validates_presence_of :name
   validates_length_of :name, :maximum => 250
   
-  attr_accessible :name,:content,:ipcnt
+  attr_accessible :name
   
   before_validation :strip_whitespace
-  
-  before_save :ipcount
   
   def strip_whitespace
     self.name = self.name.strip rescue nil
   end
   
-=begin
   def validate
     errors.add("name", "is not a valid hostname or IP") unless ( valid_ip? || valid_hostname? )
   end
@@ -32,11 +28,6 @@ class Host < ActiveRecord::Base
     else
       false
     end
-  end
-=end
-  protected
-  def ipcount
-    self.ipcnt = content.split.size
   end
   
 end

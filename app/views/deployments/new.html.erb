@@ -10,7 +10,7 @@
 <div style="width:330px;">
   <p>
     <b>Task</b><br />
-    <%= current_user.scmer? ? f.text_field(:task, :style => 'width:330px;', :disabled=>"disabled") : f.text_field(:task, :style => 'width:330px;') %>
+    <%= f.text_field :task, :style => 'width:330px;' %>
   </p>
   
   <p>
@@ -29,7 +29,7 @@
   
   <!-- hidden ids of hosts to exlude -->
   <% for host in @stage.hosts.sort_by{|x| x.name} %>
-    <input style="display:none;" type="checkbox" value="<%=h host.id %>" name="deployment[excluded_host_ids][]" id="deployment_excluded_host_ids_<%=h host.id %>" <%= (@deployment.excluded_host_ids.include?(host.id) ? 'checked="checked"' : 'checked="checked"'  rescue 'checked="checked"')%>/></td>
+    <input style="display:none;" type="checkbox" value="<%=h host.id %>" name="deployment[excluded_host_ids][]" id="deployment_excluded_host_ids_<%=h host.id %>" <%= (@deployment.excluded_host_ids.include?(host.id) ? 'checked="checked"' : ''  rescue '')%>/></td>
   <% end %>
   
   <%= link_to 'Back to stage', project_stage_path(@project, @stage), :class => 'arrow_link ontheright' %>
@@ -98,10 +98,10 @@
                 <td width="1%" style="padding:3px 0px 0px 0px;" valign="middle" align="center">
                   <%= image_tag('peritor_theme/checkbox_on.gif', 
                                 :id => "host_#{host.id}_on", 
-                                :style => 'display:none;' + 'cursor:pointer;')%>
+                                :style => if_disabled_host?(host,'display:none;') + 'cursor:pointer;')%>
                   <%= image_tag('peritor_theme/checkbox_off.gif', 
                                 :id => "host_#{host.id}_off", 
-                                :style => 'cursor:pointer;')%>
+                                :style => if_enabled_host?(host,'display:none;') + 'cursor:pointer;')%>
                 </td>
                 <td width="99%" title="<%=h h(host.name) %>" class="toggle_host" id="toggle_host_<%=h host.id %>">
                   <div style="overflow: hidden; padding-left: 5px; width: 180px; white-space: nowrap; cursor: pointer;"><%=h host.name %></div>

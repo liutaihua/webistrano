@@ -1,4 +1,3 @@
-dsfasfadsfadf
 Webistrano - Capistrano deployment the easy way
 
 

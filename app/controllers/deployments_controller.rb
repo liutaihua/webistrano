@@ -1,6 +1,6 @@
 class DeploymentsController < ApplicationController
   
-  before_filter :load_stage, :except => [:scm_deploy]
+  before_filter :load_stage
   before_filter :ensure_deployment_possible, :only => [:new, :create]
 
   # GET /projects/1/stages/1/deployments
@@ -31,6 +31,9 @@ class DeploymentsController < ApplicationController
   def new
     @deployment = @stage.deployments.new
     @deployment.task = params[:task]
+
+    # Allow description to be passed in via a URL parameter
+    @deployment.description = params[:description]
     
     if params[:repeat]
       @original = @stage.deployments.find(params[:repeat])
@@ -57,47 +60,6 @@ class DeploymentsController < ApplicationController
       end
     end
   end
-
- def scm_create
-#    @p = params
-#    return render :inline => '<%= debug(@p) %>'
-    @deployment = Deployment.new
-
-    respond_to do |format|
-      if populate_deployment_and_fire
-
-        @deployment.deploy_in_background!
-
-        format.html { redirect_to project_stage_deployment_url(@project, @stage, @deployment)}
-        format.xml  { head :created, :location => project_stage_deployment_url(@project, @stage, @deployment) }
-      else
-        @deployment.clear_lock_error
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @deployment.errors.to_xml }
-      end
-    end
-  end
-
-  def scm_deploy
-#    tag_name = params[:tag_name]
-#    task = params[:task]
-    task, tag_name = params[:cmd].strip.split('/')
-    raise "#{task} not found--!!" unless dep = Deployment.find_by_task(task)
-    h = {
-        'project_id' => dep.stage.project.id,
-        'stage_id' => dep.stage.id,
-        'deployment[task]' => task,
-        'deployment[description]' =>'deployed by scmer',
-        'deployment[override_locking]' =>'',
-        'deployment[prompt_config][tag_name]' => tag_name
-    }
-    session[:pid] = dep.stage.project.id
-
-   redirect_to("http://op.sdo.com/capui/deployments/scm_create?" + h.to_query, :status => 302)
-#    return render :inline => "<%= debug f %>"
-  end
-
-
 
   # GET /projects/1/stages/1/deployments/latest
   def latest

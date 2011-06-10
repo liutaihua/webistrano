@@ -32,22 +32,6 @@
 <br>
 
 <fieldset class="fieldset">
-  <legend> hosts list</legend>
-  <table class="sortable">
-    <tr>
-      <th width="100%">ip(<%= @ips.size%>)</th>
-    </tr>
-    <% for ip in @ips %>
-      <tr class="<%= cycle :even, :odd, :name => 'users'  %>">
-        <td nowrap><%=h ip %></td>
-      </tr>
-     <% end -%>
-  </table>
-</fieldset>
-<br />
-
-
-<fieldset class="fieldset">
   <legend>Stages</legend>
   <%= render(:partial => 'stages')%>
 </fieldset>

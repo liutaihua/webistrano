@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
   
   # GET /projects/dashboard
   def dashboard
-    @deployments = Deployment.find(:all, :limit => 10, :order => 'created_at DESC')
+    @deployments = Deployment.find(:all, :limit => 3, :order => 'created_at DESC')
 
     respond_to do |format|
       format.html # dashboard.rhtml
@@ -15,10 +15,10 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.xml
   def index
-#    @projects = Project.find(:all, :order => 'name ASC')
+    @projects = Project.find(:all, :order => 'name ASC')
 
     respond_to do |format|
-      format.html { render :layout => 'application2'}# index.rhtml
+      format.html # index.rhtml
       format.xml  { render :xml => @projects.to_xml }
     end
   end
@@ -27,10 +27,9 @@ class ProjectsController < ApplicationController
   # GET /projects/1.xml
   def show
     @project = Project.find(params[:id])
-    session[:pid] = params[:id]
 
     respond_to do |format|
-      format.html {render 'show_scmer' if current_user.scmer?}# show.rhtml
+      format.html # show.rhtml
       format.xml  { render :xml => @project.to_xml }
     end
   end
@@ -103,11 +102,6 @@ class ProjectsController < ApplicationController
       format.html { redirect_to projects_url }
       format.xml  { head :ok }
     end
-  end
-  
-  def test
-    @deployments = Deployment.find(:all,:limit=>5)
-    render :layout => false
   end
   
   protected

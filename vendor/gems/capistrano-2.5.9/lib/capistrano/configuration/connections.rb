@@ -85,13 +85,6 @@ module Capistrano
       # The factory will respond to #connect_to, which can be used to
       # establish connections to servers defined via ServerDefinition objects.
       def connection_factory
-        if exists?(:gateway) && ! exists?(:nogw)
-          logger.debug "establishing connection to gateway `#{fetch(:gateway)}'"
-          @connection_with_gateway ||= GatewayConnectionFactory.new(fetch(:gateway), self)
-        else
-          @connection_without_gateway ||= DefaultConnectionFactory.new(self)
-        end
-=begin        
         @connection_factory ||= begin
           if exists?(:gateway)
             logger.debug "establishing connection to gateway `#{fetch(:gateway)}'"
@@ -100,7 +93,6 @@ module Capistrano
             DefaultConnectionFactory.new(self)
           end
         end
-=end
       end
 
       # Ensures that there are active sessions for each server in the list.

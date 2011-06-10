@@ -1,8 +1,5 @@
 require 'digest/sha1'
-require 'open-uri'
-require 'uri'
 class User < ActiveRecord::Base
-  has_and_belongs_to_many :projects
   has_many :deployments, :dependent => :nullify, :order => 'created_at DESC'
   
   # Virtual attribute for the unencrypted password
@@ -30,9 +27,9 @@ class User < ActiveRecord::Base
   end
   
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
-  def self.authenticate(login, password, dyn)
+  def self.authenticate(login, password)
     u = find_by_login_and_disabled(login, nil) # need to get the salt
-    u && u.authenticated?(login, password, dyn) ? u : nil
+    u && u.authenticated?(password) ? u : nil
   end
 
   # Encrypts some data with the salt.
@@ -45,17 +42,8 @@ class User < ActiveRecord::Base
     self.class.encrypt(password, salt)
   end
 
-  def authenticated?(login, password, dyn)
-    return crypted_password == encrypt(password) if login == 'admin'
-    require 'md5'
-
-    s1 = 'http://61.172.241.94:8083/Tivoli/SsoCertify?user=%s&pwd=%s&dyn=%s&sub=%s&ip=%s'
-    url_str = sprintf s1, login, MD5.hexdigest(password).upcase, dyn, your_no, 'your_ip'
-
-
-    open(url_str) do |f|
-      return  f.status ==["200","OK"] && f.readline.to_i == 1 ? true : false 
-    end
+  def authenticated?(password)
+    crypted_password == encrypt(password)
   end
 
   def remember_token?
@@ -85,14 +73,6 @@ class User < ActiveRecord::Base
   
   def admin?
     self.admin.to_i == 1
-  end
-
-  def scmer?
-    self.admin.to_i == 0
-  end
-  
-  def radmin?
-    self.login == 'admin'
   end
   
   def revoke_admin!
@@ -137,4 +117,6 @@ class User < ActiveRecord::Base
     def password_required?
       WebistranoConfig[:authentication_method] != :cas && (crypted_password.blank? || !password.blank?)
     end
+
+    
 end

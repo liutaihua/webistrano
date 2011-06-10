@@ -5,7 +5,7 @@
     <td align="right"><b>User:</b></td>
     <td><%= link_to truncate(h(deployment.user.login), :length => 10) , user_path(deployment.user), :title => h(deployment.user.login) %></td>
     <td align="right"><b>Started:</b></td>
-    <td><%=h deployment.created_at.in_time_zone('Beijing').to_s(:log) %></td>
+    <td><%=h deployment.created_at.to_s(:log) %></td>
     <td width="1" rowspan="3"><%= image_tag('peritor_theme/pixel_grey.gif', :width => '1', :height => '50') %></td>
     <td width="80" rowspan="2" align="center">
       <a href="<%= project_stage_deployment_path(deployment.stage.project, deployment.stage, deployment) %>" title="<%=h deployment.status %>">
@@ -17,7 +17,7 @@
     <td align="right"><b>Stage:</b></td>
     <td><%= link_to truncate(h(deployment.stage.name), :length => 19), project_stage_path(deployment.stage.project, deployment.stage), :title => h(deployment.stage.name) %></td>
     <td align="right" title="Revision"><b>Rev:</b></td>
-    <td title="<%=h deployment.revision rescue '' %>"><%= h(deployment.revision) rescue '' %></td>
+    <td title="<%=h deployment.revision rescue '' %>"><%= truncate(h(deployment.revision), :length =>  10) rescue '' %></td>
     <td align="right"><b>Duration:</b></td>
     <td><%=h distance_of_time_in_words(deployment.created_at, deployment.completed_at, true) rescue "" %></td>
   </tr>

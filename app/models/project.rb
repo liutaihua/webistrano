@@ -1,9 +1,6 @@
 class Project < ActiveRecord::Base
-  has_and_belongs_to_many :users
-  has_many :hosts,:order => 'name ASC'
   has_many :stages, :dependent => :destroy, :order => 'name ASC'
   has_many :deployments, :through => :stages
-  has_many :recipes
   has_many :configuration_parameters, :dependent => :destroy, :class_name => "ProjectConfiguration", :order => 'name ASC'
   
   validates_uniqueness_of :name
@@ -41,10 +38,6 @@ class Project < ActiveRecord::Base
   
   def recent_deployments(limit=3)
     self.deployments.find(:all, :limit => limit, :order => 'deployments.created_at DESC')
-  end
-  
-  def recent_dep_time
-    (o = self.deployments.first(:order => 'deployments.created_at DESC')) ?  o.created_at : self.created_at
   end
   
   def prepare_cloning(other)

@@ -2,12 +2,8 @@
 
 <% form_for(:host, :url => hosts_path) do |f| %>
   <p>
-    <b>Host_File_Name</b><br />
+    <b>Name (DNS name or IP address)</b><br />
     <%= f.text_field :name, :style => 'width: 330px' %>
-  </p>
-  <p>
-    <b>Ip_list (DNS name or IP address)</b><br />
-    <%= f.text_area :content, :style => 'width: 330px;height: 200px' %>
   </p>
 
   <%= link_to 'Back to hosts', hosts_path, :class => 'arrow_link ontheright', :style => 'margin-right: 330px' %>

@@ -38,11 +38,11 @@
 	</p>
 	<p>
 	  <b>Started:</b>
-	  <%=h @deployment.created_at.in_time_zone('Beijing').to_s(:log) %> (<%=h current_user.time_zone rescue 'UTC' %>)
+	  <%=h @deployment.created_at.to_s(:log) %> (<%=h current_user.time_zone rescue 'UTC' %>)
 	</p>
   <p>
 	  <b>Completed:</b>
-	  <%=h "#{@deployment.completed_at.in_time_zone('Beijing').to_s(:log)} (#{current_user.time_zone})" rescue nil %>
+	  <%=h "#{@deployment.completed_at.to_s(:log)} (#{current_user.time_zone})" rescue nil %>
 	</p>
   </div>
   <div class="box_bottom"></div>
