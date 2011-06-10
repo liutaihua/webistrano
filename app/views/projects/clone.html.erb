@@ -1,0 +1,23 @@
+<% form_for(:project, :url => clone_path(@original)) do |f| %>
+
+  <%= render(:partial => 'form')%>
+  
+  <%= link_to 'Back to projects', projects_path, :class => 'arrow_link ontheright', :style => 'margin-right: 80px' %>
+
+  <p>
+    <%= submit_tag "Clone" %>
+  </p>
+<% end %>
+
+<% content_for(:breadcrumb) do %>
+  <% breadcrumb_box do %>
+    <%= link_to "Back to project", project_path(@original), :style => "float:right", :class => "arrow_link" %>
+    <%= link_to "Projects", projects_path %> &gt; 
+    Clone <%= link_to @original.name, project_path(@original) %> 
+  <% end %>
+<% end %>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Clone project #{h(@original.name)}" %>
+  <h2>Clone project</h2>
+<% end %>

@@ -1,0 +1,44 @@
+<br>
+
+<p><b> <%= Time.now.strftime('%Y-%m-%d') %> 部署项目汇总 --- 部署总数：<%= @deployments.size %></b></p>
+
+<style>
+ table {  
+   border: 1px solid #000000;  
+   border-collapse: collapse;  
+ }  
+ tr, td {  
+   border: 1px solid #000000;  
+ }  
+</style>
+<table style="font-size:9pt"  border="0"  cellspacing="0" cellpadding="3">
+<tr>
+  <td>部署人员</td>
+  <td>数量</td>
+</tr>
+  <% @depsum.each_with_index do |deployment,index| %>
+      <tr <%= index % 2 == 0 ? 'bgcolor="#E6E6E6"' : 'bgcolor="#FFFFFF"' %>>
+        <td><%= deployment.login %></td>
+        <td><%= deployment.cnt %></td>
+      </tr>
+<% end %>
+    </table>
+<p>
+<table style="font-size:9pt"  border="0"  cellspacing="0" cellpadding="3">
+<tr>
+  <td>项目名称</td>
+  <td>部署人员</td>
+  <td>发布概述</td>
+  <td>完成时间</td>
+</tr>
+  <% @deployments.each_with_index do |deployment,index| %>
+      <tr <%= index % 2 == 0 ? 'bgcolor="#E6E6E6"' : 'bgcolor="#FFFFFF"' %>>
+        <td><%= deployment.stage.project.name %> / <%= deployment.stage.name %></td>
+        <td><%= deployment.user.login %></td>
+        <td><%= deployment.description.gsub(/\n/,'<br>') %></td>
+        <td><%= deployment.completed_at.in_time_zone('Beijing').to_s(:log) rescue nil %></td>
+      </tr>
+<% end %>
+    </table>
+<p>
+<br/>

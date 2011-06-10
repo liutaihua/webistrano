@@ -1,0 +1,42 @@
+<fieldset class="fieldset">
+  <legend>Introduction and help</legend>
+  <div style="float: right; padding: 10px 5px 5px 5px;">
+    <a href="http://labs.peritor.com/webistrano" target="_blank"><%= image_tag('peritor_theme/webistrano_screenshot.png', :border => '0', :width => '200', :height => '151')%></a>
+  </div>
+  <div style="padding-top: 5px;">
+   Welcome to Webistrano. Your first steps should be to create a project with a stage.
+   This stage can then be deployed once you made at least one host known to Webistrano.
+   <br /><br />
+   For help and more documentation, see
+   <br />
+   <ul>
+     <li><a href="http://aqyw.sdo.com/">运维中心portal</a></li>
+     <li><a href="http://cacti.sdo.com/testcacti/">统一监控</a></li>
+     <li><a href="http://#">自动部署</a></li>
+   </ul>
+   <br />
+   Webistrano is Open Source. 安全运维中心业务运维部提供技术支持。.
+  </div>
+</fieldset>
+
+<br />
+
+<fieldset class="fieldset">
+  <legend>Recent deployments</legend>
+  <% if @deployments.empty? %>
+    <br/>
+      No recent deployments.
+    <br/>
+  <% else %>
+    <% @deployments.each do |deployment| %>
+      <%= render(:partial => 'deployments/list_item', :locals => {:deployment => deployment}) %>
+    <% end %>
+  <% end %>
+</fieldset>
+
+<br />
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Welcome to Webistrano" %>
+  <h2>Welcome to Webistrano</h2>
+<% end %>

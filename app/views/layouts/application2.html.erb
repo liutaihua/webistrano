@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta name="description" content="Peritor Webistrano - Capristrano Deployment the easy way" />
+  <meta name="keywords" content="rubyonrails ruby rails capistrano deployment" />
+  <title>自动化部署- <%=h @page_title %></title>
+  <link rel="shortcut icon" href="/favicon.ico"></link>
+  <%= javascript_include_tag :defaults %>
+<%= stylesheet_link_tag 'application', :media => 'all' %>
+  <%= yield :page_scripts %>
+
+  <script type="text/javascript">
+  
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-20206654-2']);
+    _gaq.push(['_trackPageview']);
+  
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  
+  </script>
+
+</head>
+
+<body>
+  <div id="app_top">
+    <div id="header">
+      <div id="header_claim">安全运维中心--应用运维部--版本、自动化部署
+			<% if logged_in? %>
+       <%= current_user.scmer? ? '配管' : '运维人员'%>人员--( <%= link_to h(current_user.login), user_path(current_user) %> | <%= link_to 'Logout', logout_path %> )
+      <% end %>
+			</div>
+      <a href="<%= home_path %>"><%= image_tag('peritor_theme/webistrano_logo.gif', :border => '0')%></a>
+    </div>
+    <div id="main_content">
+      
+      <div class="content2">
+        <%= yield :breadcrumb %>
+        <%= yield :flash_content %>
+        <%= yield :page_title %>
+
+        <% unless flash[:notice].blank? %>
+          <%= nice_flash(flash[:notice]) %>
+        <% end %>
+
+        <% unless flash[:error].blank? %>
+          <%= error_flash(flash[:error]) %>
+        <% end %>
+
+        <%= yield :action_box %>
+        
+        <%= yield  %>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <div id="app_bottom"></div>
+
+  <div id="footer">
+    <div id="footer_logged">
+      <% if logged_in? %>
+       Logged in as <%= link_to h(current_user.login), user_path(current_user) %> | <%= link_to 'Logout', logout_path %> 
+      <% end %>
+    </div>
+    正式版本 <%=h WEBISTRANO_VERSION %> | <a href="http://aqyw.sdo.com" target="_blank">安全运维中心--应用运维部</a>
+  </div>
+</body>
+
+</html>

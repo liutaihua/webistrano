@@ -1,0 +1,27 @@
+<% form_tag sessions_path, :class=>'login_filed' do -%>
+
+  <fieldset class="fieldset login_field">
+    <legend>login form</legend>
+    <div style="float: right; padding: 20px;">
+      <%= image_tag('peritor_theme/logo_large.gif', :border => '0', :width => '400', :height => '130')%>
+    </div>
+    <div>
+      <p><label for="login">Login</label><br/>
+      <%= text_field_tag 'login' %></p>
+      <p><label for="password">Password</label><br/>
+      <%= password_field_tag 'password' %></p>
+      <p><label for="snda-dyn">snda-dyn</label><br/>
+      <%= text_field_tag 'dyn' %></p>
+      <p><%= check_box_tag 'remember_me', '1', {}, :class => 'noframe' %>
+      <label for="remember_me">Remember me</label></p>
+      <p>
+      <%= submit_tag 'Log in' %>
+      </p>
+    </div>
+  </fieldset>
+<% end -%>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Login" %>
+  <h2 class="login_h2">应用运维部-自动化部署系统</h2>
+<% end %>

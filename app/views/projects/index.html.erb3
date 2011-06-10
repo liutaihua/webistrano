@@ -1,0 +1,51 @@
+<%projects = current_user.radmin? ? Project.find(:all) : current_user.projects%>
+
+
+<fieldset class="fieldset">
+  <legend> <%=h pluralize(projects.length, 'Project')%>(<%= Stage.count %> stages total) listed for <%= current_user.login %></legend>
+
+<% if projects.empty? %>
+<br/>
+    No projects listed for you.<br />
+  <br/>
+<% else %>
+  <table class="sortable">
+    <tr>
+      <th width="1%">project</th>
+      <th width="93%">desc</th>
+      <th width="1%">#Stages</th>
+      <th width="1%">#Deploy</th>
+      <th width="2%">#proj-create-at</th>
+      <th width="2%">#recent-deploy</th>
+    </tr>
+    <% for project in projects.sort_by {|o|o.deployments.size}.reverse %>
+      <tr class="<%= cycle :even, :odd, :name => 'projects'  %>">
+        <td><%= link_to h(project.name), project_path(project) %></td>
+        <td><%=h project.description %></td>
+        <td><%=h project.stages.count %></td>
+        <td><%=h project.deployments.count %></td>
+        <td><%=h project.created_at.to_s(:date_with_day) %></td>
+        <td><%=h ((r= project.recent_deployments(1).first) ?  r.created_at.to_s(:date_with_day) : 'never') %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<br />
+
+<%if current_user.admin?%>
+<%= link_to 'New project', new_project_path, :class => 'arrow_link' %>
+<%end%>
+
+</fieldset>
+
+<% content_for(:breadcrumb) do %>
+  <% breadcrumb_box do %>
+    <%= link_to "项目部署一览表", projects_path %>
+  <% end %>
+<% end %>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Projects" %>
+  <h2>Projects</h2>
+<% end %>

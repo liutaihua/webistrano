@@ -1,0 +1,66 @@
+<div class="special_box">
+  <div class="special_box_top"></div>
+  <div class="special_box_middle host_box"></div>
+  <div class="special_box_bottom"></div>
+</div>
+
+<div class="box">
+  <div class="box_top"></div>
+  <div class="box_middle">
+		<p>
+		  <b>Name:</b>
+		  <%=h @host.name %>
+		</p>
+		<p>
+		  <b>#Stages:</b>
+		  <%=h @host.stages.uniq.size %>
+		</p>
+		<p>
+		  <b>#Roles:</b>
+		  <%=h @host.roles.count %>
+		</p>
+		<% if current_user.admin? %>
+  		<br />
+	  	<%= link_to 'Edit Host', edit_host_path(@host), :class => 'arrow_link' %> | 
+		  <%= link_to 'Delete', host_path(@host), :confirm => 'Are you sure?', :method => :delete, :class => 'arrow_link'  %>
+		<% end %>
+  </div>
+  <div class="box_bottom"></div>
+</div>
+
+<div class="clear"></div>
+<br>
+
+<fieldset class="fieldset">
+  <legend> hosts list</legend>
+  <table class="sortable">
+    <tr>
+      <th width="100%">ip(<%= @ips.size%>)</th>
+    </tr>
+    <% for ip in @ips %>
+      <tr class="<%= cycle :even, :odd, :name => 'users'  %>">
+        <td nowrap><%=h ip %></td>
+      </tr>
+     <% end -%>
+  </table>
+</fieldset>
+<br />
+
+
+<fieldset class="fieldset">
+  <legend>Stages</legend>
+  <%= render(:partial => 'stages')%>
+</fieldset>
+
+<% content_for(:breadcrumb) do %>
+  <% breadcrumb_box do %>
+    <%= link_to "Manage hosts", hosts_path, :style => "float:right", :class => "arrow_link" %>
+    <%= link_to "Hosts", hosts_path %> &gt; 
+    Host <%= link_to @host.name, host_path(@host) %> 
+  <% end %>
+<% end %>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Host #{h(@host.name)}" %>
+  <h2>Host <%=h @host.name %></h2>
+<% end %>

@@ -1,0 +1,25 @@
+<% form_for(:recipe, :url => recipe_path(@recipe), :html => { :method => :put }) do |f| %>
+
+  <%= render(:partial => 'form')%>
+
+  <%= link_to 'Back to recipe', recipe_path(@recipe), :class => 'arrow_link ontheright'%>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+
+<% content_for(:breadcrumb) do %>
+  <% breadcrumb_box do %>
+    <%= link_to "Back to recipe", recipe_path(@recipe), :style => "float:right", :class => "arrow_link" %>
+    <%= link_to "Recipes", recipes_path %> &gt; 
+    Recipe <%= link_to @recipe.name, recipe_path(@recipe) %>  &gt; 
+    Edit
+  <% end %>
+<% end %>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Edit recipe #{h(@recipe.name)}" %>
+  <h2>Edit recipe <%= link_to h(@recipe.name), recipe_path(@recipe) %></h2>
+<% end %>

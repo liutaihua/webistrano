@@ -1,0 +1,20 @@
+自动部署回馈：
+==============================================
+
+项目名称：<%= @deployment.stage.project.name %> / <%= @deployment.stage.name %> 部署完成!
+
+发布概述: <%= @deployment.description %>
+
+任务名称: <%= @deployment.task %>
+
+发布版本: <%= @deployment.revision %>
+
+状态: <%= @deployment.status %>
+
+开始时间: <%= @deployment.created_at.in_time_zone('Beijing').to_s(:log) %>
+
+完成时间: <%= @deployment.completed_at.in_time_zone('Beijing').to_s(:log) rescue nil %>
+
+部署人员: <%= @deployment.user.login %>
+
+部署服务器: <%= @deployment.iplist %>

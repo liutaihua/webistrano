@@ -1,0 +1,20 @@
+<br />
+<fieldset class="fieldset">
+  <legend>Recent Deployments</legend>
+  <%= render(:partial => 'projects/deployments')%>
+  <br />
+</fieldset>
+
+<% content_for(:breadcrumb) do %>
+  <% breadcrumb_box do %>
+    <%= link_to "Manage projects", projects_path, :style => "float:right", :class => "arrow_link" %>
+    <%= link_to "Projects", projects_path %> &gt; 
+    Project <%= link_to current_project.name, project_path(current_project) %> 
+  <% end %>
+<% end %>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Project #{h(current_project.name)}" %>
+  <h2>Project <%= link_to h(current_project.name), project_path(current_project) %></h2>
+  <p><%= " Stage Count:#{current_project.stages.count}  部署：#{current_project.deployments.count}"%></p>
+<% end %>

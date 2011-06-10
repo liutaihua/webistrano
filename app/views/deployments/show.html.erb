@@ -1,0 +1,42 @@
+<div id="status_info">
+  <%= render(:partial => 'status')%>
+</div>
+
+<% content_for(:breadcrumb) do %>
+  <% breadcrumb_box do %>
+    <%= link_to "Projects", projects_path %> &gt; 
+    Project <%= link_to current_project.name, project_path(current_project) %> &gt; 
+    Stage <%= link_to current_stage.name, project_stage_path(current_project, current_stage) %> &gt; 
+    Deployment
+  <% end %>
+<% end %>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Deployment of stage #{h(current_stage.name)} of project #{h(current_project.name)}" %>
+  <h2>Deployment: <%= link_to h(@deployment.task), project_stage_deployment_path(current_project, current_stage, @deployment) %></h2>
+<% end %>
+
+<% content_for(:page_scripts) do %>
+
+  <script type="text/javascript">
+    
+    function check_auto_scroll_log(){
+      var scroller = $("auto_scroll_log");
+      var bottom_marker = $('back_link_at_the_bottom');
+      
+      if(scroller && scroller.checked && bottom_marker){
+        bottom_marker.scrollTo();
+      }
+    }
+    
+    function scroll_to_top(){
+      if ( $('auto_scroll_log').checked ){
+        $('auto_scroll_log').checked = false;
+      }
+      
+      $('header').scrollTo();
+    }
+    
+  </script>
+
+<% end %>

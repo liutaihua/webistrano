@@ -1,0 +1,11 @@
+<% if @project.deployments.empty? %>
+  <br/>
+    项目未曾部署过。暂无部署记录。 
+  <br/>
+<% else %>
+<% @deps.each do |deployment| %>
+    <%= render(:partial => 'deployments/list_item', :locals => {:deployment => deployment}) %>
+  <% end %>
+<% end %>
+<br />
+<%= will_paginate @deps %>

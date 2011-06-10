@@ -1,0 +1,69 @@
+<div class="special_box">
+  <div class="special_box_top"></div>
+  <div class="special_box_middle recipe_box"></div>
+  <div class="special_box_bottom"></div>
+</div>
+
+<div class="box">
+  <div class="box_top"></div>
+  <div class="box_middle">
+		<p>
+		  <b>#Stages:</b>
+		  <%=h @recipe.stages.count %>
+		</p>
+		<p>
+		  <b>#Versions:</b>
+		  <%=h @recipe.version %>
+		</p>
+    <br/>
+    <p>
+		  <%= select_tag "version", options_for_select(all_recipe_versions, params[:version]), :id => "recipe_version" %>
+		  <%= link_to_function "Show", "location.href='#{recipe_path(@recipe)}?version=' + $F('recipe_version')", :class => "arrow_link" %>
+		  <%= link_to "Rollback", edit_recipe_path(@recipe, :version => params[:version]), :class => "arrow_link" if not_latest_version and current_user.admin? %>
+    </p>
+		<% if current_user.admin? %>
+	  	<%= link_to 'Edit latest version', edit_recipe_path(@recipe), :class => 'arrow_link' %> |
+	  	<%= link_to 'Delete all versions', recipe_path(@recipe), :confirm => 'Are you sure?', :method => :delete, :class => 'arrow_link' %>
+	  <% end %>
+  </div>
+  <div class="box_bottom"></div>
+</div>
+
+<div class="clear"></div>
+<br />
+
+<fieldset class="fieldset" style="width: 212px; margin-left: 28px; float: right;">
+  <legend>Description</legend>
+  <p>
+    <%=web_friendly_text @recipe.description %>
+ 	</p>
+  <%= link_to 'Edit', edit_recipe_path(@recipe), :class => 'arrow_link' %>
+</fieldset>
+
+<fieldset class="fieldset">
+  <legend>Used by stage</legend>
+  <%= render(:partial => 'stages')%>
+</fieldset>
+
+<div class="clear"></div>
+
+<div class="clear"></div>
+<br />
+
+<fieldset class="fieldset">
+  <legend>Body</legend>
+  <%= render :partial => 'preview', :locals => {:recipe => @recipe} %>
+</fieldset>
+
+<% content_for(:breadcrumb) do %>
+  <% breadcrumb_box do %>
+    <%= link_to "Manage recipes", recipes_path, :style => "float:right", :class => "arrow_link" %>
+    <%= link_to "Recipes", recipes_path %> &gt; 
+    Recipe <%= link_to @recipe.name, recipe_path(@recipe) %> 
+  <% end %>
+<% end %>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Recipe #{h(@recipe.name)}" %>
+  <h2>Recipe <%= link_to h(@recipe.name), recipe_path(@recipe) %></h2>
+<% end %>

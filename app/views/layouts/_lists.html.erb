@@ -1,0 +1,21 @@
+<div id="lists_open_content" style="<%=h show_if_opened(status) %>">
+	<% prjs = current_user.radmin? ? Project.all : current_user.projects %>
+  <% if prjs.length > 0 %>
+    <% for project in prjs %>
+      <a href="<%= list_path(project) %>" class="menu_link <%=h active_link_class(project) %>" title="<%=h project.name %>">
+		    <div class="menu_link_title">
+		      <%=h project.name %>
+		    </div>
+      </a>      
+    <% end %>
+  <% else %>
+    <div class="menu_item">No project created yet</div>
+  <% end %>
+</div>
+<div id="lists_closed_content" style="<%=h show_if_closed(status) %>">
+  <a href="javascript:open_menu_box('lists')" class="menu_link  menu_link_create">
+	  <div class="menu_link_title">
+	    <%=h pluralize(Project.count, 'project')%>
+	  </div>
+  </a>
+</div>

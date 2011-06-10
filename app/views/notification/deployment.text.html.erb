@@ -1,0 +1,67 @@
+<style>
+    table {
+        border: 1px solid #000000;
+        border-collapse: collapse;
+    }
+
+    tr, td {
+        border: 1px solid #000000;
+    }
+
+    .l1 {
+        background-color: #E6E6E6
+    }
+
+    .l2 {
+        background-color: #FFFFFF
+    }
+</style>
+
+<br>
+<p><b>自动部署回馈：</b></p>
+<table style="font-size:9pt" border="0" cellspacing="0" cellpadding="3">
+  <tr class="l1">
+    <td>项目名称：</td>
+    <td><%= @deployment.stage.project.name %> / <%= @deployment.stage.name %> 部署完成!</td>
+  </tr>
+  <tr class="l2">
+    <td>发布概述:</td>
+    <td><%= @deployment.description.gsub(/\n/,'<br>') %></td>
+  </tr>
+  <tr class="l1">
+    <td>任务名称:</td>
+    <td><%= @deployment.task %></td>
+  </tr>
+  <tr class="l2">
+    <td>发布版本:</td>
+    <td><%= @deployment.revision.sub('your tagname?', '---') %></td>
+  </tr>
+  <tr class="l1">
+    <td>状态:</td>
+    <td><%= @deployment.status %></td>
+  </tr>
+  <tr class="l2">
+    <td>开始时间:</td>
+    <td><%= @deployment.created_at.in_time_zone('Beijing').to_s(:log) %></td>
+  </tr>
+  <tr class="l1">
+    <td>完成时间:</td>
+    <td><%= @deployment.completed_at.in_time_zone('Beijing').to_s(:log) rescue nil %></td>
+  </tr>
+  <tr class="l2">
+    <td>部署人员:</td>
+    <td><%= @deployment.user.login %></td>
+  </tr>
+  <tr class="l1">
+    <td>部署服务器:</td>
+    <td><%= @deployment.iplist.gsub(/\n/,'<br>') %></td>
+  </tr>
+</table>
+<br>
+
+
+
+
+
+
+

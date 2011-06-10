@@ -1,0 +1,54 @@
+<% form_for(:stage, :url => recipes_project_stage_path(@project, @stage), :html => { :method => :put }) do |f| %>  
+
+  <fieldset class="fieldset">
+    <legend>Recipes to use</legend>
+    
+    <% if current_project && current_project.recipes.count > 0 %>
+    
+      <table class="sortable">
+        <tr>
+          <th width="1%">Use</th>
+          <th width="39%">Name</th>
+          <th width="60%">Description</th>
+        </tr>
+        <% for recipe in current_project.recipes %>
+          <tr class="<%= cycle :even, :odd, :name => 'recipes'  %>">
+            <td><input type="checkbox" value="<%=h recipe.id %>" name="stage[recipe_ids][]" id="stage_recipe_ids_<%=h recipe.id %>" <%= @stage.recipes.include?(recipe) ? 'checked="checked"' : '' %>/></td>
+            <td><%= link_to h(recipe.name), recipe_path(recipe) %></td>
+            <td><%=h recipe.description %></td>
+          </tr>
+        <% end %>
+      </table>
+      
+      <br />
+      <p>
+        <%= submit_tag "Update used recipes" %>
+      </p>
+      
+    <% else %>
+     No recipes present<br /><br />
+    <% end %>
+  
+  </fieldset>    
+    
+    
+  
+  
+<% end %>
+<br />
+<%= link_to 'Back to stage', project_stage_path(current_project, current_stage), :class => 'arrow_link'  %>
+
+<% content_for(:breadcrumb) do %>
+  <% breadcrumb_box do %>
+    <%= link_to "Back to stage", project_stage_path(current_project, current_stage), :style => "float:right", :class => "arrow_link" %>
+    <%= link_to "Projects", projects_path %> &gt; 
+    Project <%= link_to current_project.name, project_path(current_project) %> &gt; 
+    Stage <%= link_to current_stage.name, project_stage_path(current_project, current_stage) %>  &gt; 
+    Recipes management
+  <% end %>
+<% end %>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Recipes management for stage: #{h @stage.name}"%>
+  <h2>Recipes management</h2>
+<% end %>

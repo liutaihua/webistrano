@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="description" content="Peritor Webistrano - Capristrano Deployment the easy way">
+    <meta name="keywords" content="rubyonrails ruby rails capistrano deployment">
+    <title>快速部署接口</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="/capui/stylesheets/application2.css" media="screen" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div id="app_top">
+<div id="header">
+    <div id="header_claim">安全运维中心--应用运维部--版本、自动化部署</div>
+    <a href="/capui"><img alt="Webistrano_logo" src="/capui/images/peritor_theme/webistrano_logo.gif" border="0"></a>
+</div>
+<div id="main_content">
+
+<div class="content">
+
+    <h2>快速部署接口</h2>
+
+    <form action="/capui/deployments/scm_deploy" method="get">
+        <p>
+            <b>cmdline:  (taskname/tagname/hostname)</b><br><br><input id="project_name" name="cmd" size="100" style="width: 630px;" value="" type="text">
+        </p>
+
+        <p style="text-align:center">
+            <input name="commit" value="deploy" type="submit" style="width: 400px">
+        </p>
+
+    </form>
+
+
+</div>
+<div class="clear"></div>
+</div>
+</div>
+<div id="app_bottom"></div>
+
+<div id="footer">
+    <div id="footer_logged">
+
+        <!--Logged in as <a href="http://bv14/users/5">yanglei</a> | <a href="http://bv14/logout">Logout</a>-->
+
+    </div>
+    正式版本 1.5 | <a href="http://aqyw.sdo.com/" target="_blank">安全运维中心--应用运维部</a>
+</div>
+</body>
+</html>

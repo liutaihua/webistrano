@@ -1,0 +1,31 @@
+<% flashed_errors(:host) %>
+
+<% form_for(:host, :url => hosts_path) do |f| %>
+  <p>
+    <b>Host_File_Name</b><br />
+    <%= f.text_field :name, :style => 'width: 330px' %>
+  </p>
+  <p>
+    <b>Ip_list (DNS name or IP address)</b><br />
+    <%= f.text_area :content, :style => 'width: 330px;height: 200px' %>
+  </p>
+
+  <%= link_to 'Back to hosts', hosts_path, :class => 'arrow_link ontheright', :style => 'margin-right: 330px' %>
+
+  <p>
+    <%= submit_tag "Create host" %>
+  </p>
+<% end %>
+
+<% content_for(:breadcrumb) do %>
+  <% breadcrumb_box do %>
+    <%= link_to "Manage hosts", hosts_path, :style => "float:right", :class => "arrow_link" %>
+    <%= link_to "Hosts", hosts_path %> &gt; 
+    New
+  <% end %>
+<% end %>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "New host" %>
+  <h2>New host</h2>
+<% end %>

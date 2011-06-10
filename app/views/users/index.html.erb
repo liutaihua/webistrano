@@ -1,0 +1,55 @@
+<fieldset class="fieldset">
+  <legend> <%=h pluralize(User.count, 'User')%> listed</legend>
+
+<% if @users.empty? %>
+  <br/>
+    No users added yet.<br />
+  <br/>
+<% else %>
+  <table class="sortable">
+    <tr>
+      <th width="1%">Login</th>
+      <th width="96%">Email</th>
+      <th width="1%">Admin</th>
+      <th width="1%">Disabled</th>
+      <th width="1%">Created At</th>
+    </tr>
+    <% for user in @users %>
+      <tr class="<%= cycle :even, :odd, :name => 'users'  %>">
+        <td nowrap><%= link_to h(user.login), user_path(user) %></td>
+        <td><%=h user.email %></td>
+        <td><%=h user.admin? ? 'Admin' : '' %></td>
+        <td>
+          <% if user.disabled? %>
+            <span style="color:red">disabled</span>
+          <% end %>
+        </td>
+        <td><%=h user.created_at.to_s(:date_with_day) %></td>
+        <% if current_user.admin? || current_user == user -%>
+          <td><%= link_to 'Edit', edit_user_path(user) %></td>
+        <% end -%>
+        <% if current_user.admin? -%>
+          <td><%= link_to 'Delete', user_path(user), :confirm => 'Are you sure?', :method => :delete %></td>
+        <% end -%>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<% if current_user.admin? %>
+  <br />
+  <%= link_to 'New user', new_user_path, :class => 'arrow_link' %>
+<% end %>
+
+</fieldset>
+
+<% content_for(:breadcrumb) do %>
+  <% breadcrumb_box do %>
+    <%= link_to "Users", users_path %>
+  <% end %>
+<% end %>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Users" %>
+  <h2>Users</h2>
+<% end %>

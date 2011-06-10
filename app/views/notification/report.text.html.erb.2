@@ -1,0 +1,48 @@
+<br>
+
+<h2>部署项目汇总 <%= Time.now.strftime('%Y-%m-%d') %></h2>
+<h3>部署总数：<%= @deployments.size %></h3><br>
+<table style="font-size:9pt"  border="1">
+<tr>
+  <td>no</td>
+  <td>项目名称</td>
+  <td>备注Commen</td>
+  <td>任务名称</td>
+  <td>发布版本</td>
+  <td>状态</td>
+  <td>开始时间</td>
+  <td>完成时间</td>
+  <td>部署人员</td>
+  <td>部署服务器</td>
+</tr>
+  <% @deployments.each_with_index do |deployment,index| %>
+      <tr>
+        <td><%= index %></td>
+
+        <td><%= deployment.stage.project.name %> / <%= deployment.stage.name %></td>
+        <td><%= deployment.description %></td>
+        <td><%= deployment.task %></td>
+        <td><%= deployment.revision %></td>
+        <td><%= deployment.status %></td>
+        <td><%= deployment.created_at.in_time_zone('Beijing').to_s(:log) %></td>
+        <td><%= deployment.completed_at.in_time_zone('Beijing').to_s(:log) rescue nil %></td>
+        <td><%= deployment.user.login %></td>
+        <td><%= deployment.iplist %></td>
+
+      </tr>
+<% end %>
+    </table>
+<br>
+<br>
+<h2>自动部署进展汇总： <%= Time.now.strftime('%Y-%m-%d') %></h2>
+<h3>project总数：<%= @projects.size %></h3><br>
+<table border="1" style="font-size:9pt">
+<tr><td>no</td><td>proj name</td><td>operator</td><td>stage counts</td></tr>
+<% @projects.each_with_index do |prj, idx| %>
+<tr><td>
+<%= idx%></td><td><%= prj.name %></td><td><%= prj.users.map {|u| u.login}.join(', ') %>&nbsp;</td><td>
+<% s = prj.stages%>
+(<%= s.size %>)&nbsp;
+	<%= s.map {|so| so.name}.join(', ') %></td></tr>
+<% end %></table>
+
