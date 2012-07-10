@@ -1,13 +1,11 @@
 <div class="special_box">
   <div class="special_box_top"></div>
   <div class="special_box_middle deployments_box">
-<!--
-   <p><%= link_to 'Deploy', new_project_stage_deployment_path(current_project, @stage) + '?task=deploy', :class => 'arrow_link' %></p>
+<!--   <p><%= link_to 'Deploy', new_project_stage_deployment_path(current_project, @stage) + '?task=deploy', :class => 'arrow_link' %></p>
    <p><%= link_to 'Deploy and migrate', new_project_stage_deployment_path(current_project, @stage) + '?task=deploy:migrations', :class => 'arrow_link' %></p>
    <p><%= link_to 'Restart app servers', new_project_stage_deployment_path(current_project, @stage) + '?task=deploy:restart', :class => 'arrow_link' %></p>
-   <p><%= link_to 'Setup', new_project_stage_deployment_path(current_project, @stage) + '?task=deploy:setup', :class => 'arrow_link' %></p>
+   <p><%= link_to 'Setup', new_project_stage_deployment_path(current_project, @stage) + '?task=deploy:setup', :class => 'arrow_link' %></p>-->
    <p>
--->
      <%= select_tag('task', options_for_select(@task_list)) %>
    </p>
    <p>
@@ -26,6 +24,14 @@
 	  <p>
 	    <b>Name:</b>
 		   <%=h @stage.name %>
+		</p>
+	  <p>
+	    <b>demander:</b>
+		   <%=h @stage.demander %>
+		</p>
+	  <p>
+	    <b>task-sn:</b>
+		   <%=h @stage.task_sn %>
 		</p>
 		<p>
 		  <b>Project:</b>

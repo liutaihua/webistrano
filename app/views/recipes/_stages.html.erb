@@ -9,6 +9,7 @@
       <th width="50%">Stage</th>
     </tr>
   <% for stage in @recipe.stages %>
+	<% next unless stage.project_id.to_i == session[:pid].to_i %>
     <tr class="<%= cycle :even, :odd, :name => 'stages' %>">
       <td><%= link_to h(stage.project.name), project_path(stage.project) %></td>
       <td><%= link_to h(stage.name), project_stage_path(stage.project, stage) %></td>

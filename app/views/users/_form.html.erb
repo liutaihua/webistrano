@@ -5,6 +5,11 @@
 </p>
 
 <p>
+  <b>Nick</b><br />
+  <%= text_field 'user', 'nick', :style =>'width:330px;' %>
+</p>
+
+<p>
   <b>Email</b><br />
   <%= text_field 'user', 'email', :style =>'width:330px;' %>
 </p>
@@ -28,7 +33,7 @@
 
 <% if logged_in? && current_user.admin? -%>
   <p>
-    <b>Admin?</b><br />
-    <%= check_box 'user', 'admin', :class => 'noframe' %>
+  <b>Role</b><br />
+  <%=select :user,:admin,[['Viewer',-1],['Scmer',0],['Oper',1]]%>  
   </p>
 <% end -%>

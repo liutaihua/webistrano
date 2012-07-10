@@ -1,7 +1,7 @@
 <fieldset class="fieldset">
-  <legend> <%=h pluralize(Recipe.count, 'Recipe')%> listed</legend>
+  <legend> <%=h pluralize((cnt = current_project ? current_project.recipes.length : 0), 'Recipe')%> listed</legend>
 
-<% if @recipes.empty? %>
+<% if cnt == 0%>
   <br/>
     No recipes configured yet.<br />
     Recipes are custom Capistrano tasks and variables that can be used across stages.
@@ -14,7 +14,7 @@
       <th width="1%">#Stages</th>
       <th width="1%">Created At</th>
     </tr>
-    <% for recipe in @recipes %>
+    <% for recipe in current_project.recipes %>
       <tr class="<%= cycle :even, :odd, :name => 'recipes'  %>">
         <td><%= link_to h(recipe.name), recipe_path(recipe) %></td>
         <td><%=h recipe.description %></td>

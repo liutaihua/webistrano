@@ -1,5 +1,9 @@
+require 'uri'
+require 'md5'
+require 'open-uri'
 require 'digest/sha1'
 class User < ActiveRecord::Base
+  has_and_belongs_to_many :projects
   has_many :deployments, :dependent => :nullify, :order => 'created_at DESC'
   
   # Virtual attribute for the unencrypted password
@@ -73,6 +77,18 @@ class User < ActiveRecord::Base
   
   def admin?
     self.admin.to_i == 1
+  end
+  
+  def scmer?
+    self.admin.to_i == 0
+  end
+
+  def viewer?
+    self.admin.to_i == -1
+  end
+  
+  def radmin?
+    self.login == 'admin'
   end
   
   def revoke_admin!

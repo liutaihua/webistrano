@@ -1,9 +1,9 @@
-<% form_tag sessions_path do -%>
+<% form_tag sessions_path, :class=>'login_filed' do -%>
 
-  <fieldset class="fieldset">
-    <legend>Webistrano login</legend>
+  <fieldset class="fieldset login_field">
+    <legend>login form</legend>
     <div style="float: right; padding: 20px;">
-      <%= image_tag('peritor_theme/webistrano_logo_large.png', :border => '0', :width => '400', :height => '130')%>
+      <%= image_tag('peritor_theme/logo_large.gif', :border => '0', :width => '400', :height => '130')%>
     </div>
     <div>
       <p><label for="login">Login</label><br/>
@@ -21,5 +21,5 @@
 
 <% content_for(:page_title) do %>
   <% @page_title = "Login" %>
-  <h2 style="color: #A40008; ">Welcome to Webistrano</h2>
+  <h2 class="login_h2">应用运维部-自动化部署系统</h2>
 <% end %>

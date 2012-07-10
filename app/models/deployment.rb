@@ -5,10 +5,11 @@ class Deployment < ActiveRecord::Base
   
   validates_presence_of :task, :stage, :user
   validates_length_of :task, :maximum => 250
+  #validates_format_of :revision, :with => MyCfg[:rev_reg], :message => 'violation of revision rule!', :unless => lambda {self.revision.blank?}
   
   serialize :excluded_host_ids
   
-  attr_accessible :task, :prompt_config, :description, :excluded_host_ids, :override_locking
+  attr_accessible :task, :prompt_config, :description, :excluded_host_ids, :override_locking, :iplist, :revision
     
   # given configuration hash on create in order to satisfy prompt configurations
   attr_accessor :prompt_config
@@ -24,7 +25,7 @@ class Deployment < ActiveRecord::Base
   STATUS_SUCCESS  = "success"
   STATUS_RUNNING  = "running"
   STATUS_VALUES   = [STATUS_SUCCESS, STATUS_FAILED, STATUS_CANCELED, STATUS_RUNNING]
-  
+
   validates_inclusion_of :status, :in => STATUS_VALUES
     
   # check (on on creation ) that the stage is ready
@@ -38,15 +39,20 @@ class Deployment < ActiveRecord::Base
       end
       
       errors.add('lock', 'The stage is locked') if self.stage.locked? && !self.override_locking
-      
+      errors.add('revision', 'Violate of the regex rule')  unless self.revision.blank? || self.revision =~ MyCfg[:rev_reg] 
       ensure_not_all_hosts_excluded
+      ensure_not_locked_tags
+      ensure_tag_name_defined
+
     end
   end
+
   
   def self.lock_and_fire(&block)
     transaction do
       d = Deployment.new
       block.call(d)
+
       return false unless d.valid?
       stage = Stage.find(d.stage_id, :lock => true)
       stage.lock
@@ -109,7 +115,7 @@ class Deployment < ActiveRecord::Base
 
   def complete_with_error!
     save_completed_status!(STATUS_FAILED)
-    notify_per_mail
+    #notify_per_mail
   end
   
   def complete_successfully!
@@ -119,9 +125,16 @@ class Deployment < ActiveRecord::Base
   
   def complete_canceled!
     save_completed_status!(STATUS_CANCELED)
-    notify_per_mail
+    #notify_per_mail
   end
-  
+
+  def git_server_revert_background!
+    unless RAILS_ENV == 'test'   
+      RAILS_DEFAULT_LOGGER.info "Calling other ruby process in the background in order to deploy deployment #{self.id} (stage #{self.stage.id}/#{self.stage.name})"
+       system("sh -c \"cd #{RAILS_ROOT} && ruby script/runner -e #{RAILS_ENV} ' deployment = Deployment.find(#{self.id}); deployment.prompt_config = #{self.prompt_config.inspect.gsub('"', '\"')} ; Webistrano::Gitutils.new(deployment).revert_task! ' >> #{RAILS_ROOT}/log/#{RAILS_ENV}.log 2>&1\" &")
+    end
+  end
+
   # deploy through Webistrano::Deployer in background (== other process)
   # TODO - at the moment `Unix &` hack
   def deploy_in_background! 
@@ -133,7 +146,7 @@ class Deployment < ActiveRecord::Base
   
   # returns an unsaved, new deployment with the same task/stage/description
   def repeat
-    Deployment.new.tap do |d|
+    returning Deployment.new do |d|
       d.stage = self.stage
       d.task = self.task
       d.description = "Repetition of deployment #{self.id}: \n" 
@@ -193,6 +206,13 @@ class Deployment < ActiveRecord::Base
     self.errors.instance_variable_get("@errors").delete('lock')
   end
   
+  def get_iplist
+      t = self.roles.dup.delete_if{|role| self.excluded_hosts.include?(role.host) }
+      t.map {|r|r.host.content}.join("\r\n").gsub("\r\n", ' ') unless t.blank?
+      rescue
+       'err in get_iplist'
+  end
+
   protected
   def ensure_not_all_hosts_excluded
     unless self.stage.blank? || self.excluded_host_ids.blank?
@@ -200,6 +220,20 @@ class Deployment < ActiveRecord::Base
         errors.add('base', "You cannot exclude all hosts.")
       end
     end
+  end
+
+  def   ensure_not_locked_tags
+        if Gitinfor.exists?(:locked => 1,:tag_name => self.revision)
+         errors.add('base', "The \"Tag_name\" is locked.")
+	end
+  end
+  def  ensure_tag_name_defined
+       if self.revert == 1 then
+	 unless ConfigurationParameter.exists?(:name =>"git_project_name",:stage_id => self.stage_id) then 
+        errors.add('base', "\"git_project_name\" not defined! Please edit Stage configure.")
+	#end
+	end
+      end
   end
   
   def save_completed_status!(status)
@@ -218,4 +252,5 @@ class Deployment < ActiveRecord::Base
       Notification.deliver_deployment(self, email)
     end
   end
+
 end

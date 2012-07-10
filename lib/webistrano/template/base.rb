@@ -11,13 +11,13 @@ module Webistrano
         :git_path => "/var/grepos/",
         :tag_name => 'your tagname?'
       }.freeze
-
+      
       DESC = <<-'EOS'
         Base template that the other templates use to inherit from.
         Defines basic Capistrano configuration parameters.
         Overrides no default Capistrano tasks.
       EOS
-
+      
       TASKS =  <<-'EOS'
         # allocate a pty by default as some systems have problems without
         default_run_options[:pty] = true

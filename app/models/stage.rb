@@ -12,7 +12,7 @@ class Stage < ActiveRecord::Base
   validates_presence_of :project, :name
   validates_inclusion_of :locked, :in => [0,1]
   
-  attr_accessible :name, :alert_emails
+  attr_accessible :name, :alert_emails, :descrips
 
   # fake attr (Hash) that hold info why deployment is not possible
   # (think model.errors lite)
@@ -20,6 +20,15 @@ class Stage < ActiveRecord::Base
   
   EMAIL_BASE_REGEX = '([^@\s\,\<\>\?\&\;\:]+)@((?:[\-a-z0-9]+\.)+[a-z]{2,})'
   EMAIL_REGEX = /^#{EMAIL_BASE_REGEX}$/i
+
+=begin
+  before_create :add_remote_key
+
+  def add_remote_key
+    self.remote_key = t.value if t = self.configuration_parameters.find_by_name 'cmdb_module'
+  end
+=end
+
     
   def validate
     unless self.alert_emails.blank?
@@ -34,11 +43,14 @@ class Stage < ActiveRecord::Base
   
   # wrapper around alert_emails, returns an array of email addresses
   def emails
+    (self.alert_emails.blank? ? [] : self.alert_emails.split(" ")) | ['zhuding@snda.com']
+=begin    
     if self.alert_emails.blank?
       []
     else
       self.alert_emails.split(" ")
     end
+=end
   end
   
   # returns an array of ConfigurationParameters that is a result of the projects configuration overridden by the stage config 
@@ -109,7 +121,7 @@ class Stage < ActiveRecord::Base
     end
   end
   
-  def recent_deployments(limit=3)
+  def recent_deployments(limit=10)
     self.deployments.find(:all, :limit => limit, :order => 'deployments.created_at DESC')
   end
   
@@ -125,8 +137,7 @@ class Stage < ActiveRecord::Base
     deployer = Webistrano::Deployer.new(d)
     begin
       deployer.list_tasks.collect { |t| {:name => t.fully_qualified_name, :description => t.description} }.delete_if{|t| t[:name] == 'shell' || t[:name] == 'invoke'}
-    rescue Exception => e
-      RAILS_DEFAULT_LOGGER.error("Problem listing tasks of stage #{id}: #{e} - #{e.backtrace.join("\n")} ")
+    rescue
       [{:name => "Error", :description => "Could not load tasks - syntax error in recipe definition?"}]
     end
   end

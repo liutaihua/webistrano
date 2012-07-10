@@ -1,0 +1,58 @@
+<%
+projects = current_user.radmin? ? 
+Project.find_by_sql("select * from pinfos union all select a.id, a.name, a.description, 0 as 'nss', 0 as 'nds', '1990-01-01 00:00:00' as 'updated_at', '1990-01-01 00:00:00' as 'mrec' from projects a left join pinfos b on a.id=b.id where b.id is null") : 
+Project.find_by_sql("
+select * from pinfos where id in (select project_id from projects_users where user_id = #{current_user.id}) 
+union all
+select a.id, a.name, a.description, 0 as 'nss', 0 as 'nds', '1990-01-01 00:00:00' as 'updated_at', '1990-01-01 00:00:00' as 'mrec' from projects a 
+left join pinfos b on a.id=b.id 
+where b.id is null 
+and a.id in (select project_id from projects_users where user_id = #{current_user.id} );
+ ")
+%>
+<fieldset class="fieldset">
+<% if projects.empty? %>
+<br/>
+    No projects listed for you.<br />
+  <br/>
+<% else %>
+  <table class="sortable">
+    <tr>
+      <th width="1%">project</th>
+      <th width="93%">desc</th>
+      <th width="1%">#Stages</th>
+      <th width="1%">#Deploy</th>
+      <th width="2%">#proj-updated-at</th>
+      <th width="2%">#recent-deploy</th>
+    </tr>
+    <% for project in projects %>
+      <tr class="<%= cycle :even, :odd, :name => 'projects'  %>">
+        <td><%= link_to h(project.name), project_path(project) %></td>
+        <td><%=h project.description %></td>
+        <td><%=h project.nss %></td>
+        <td><%=h project.nds %></td>
+        <td><%=h project.updated_at.to_s(:date_with_day) %></td>
+        <td><%=h((r= project.mrec) ?  r : 'never') %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<br />
+
+<%if current_user.radmin?%>
+<%= link_to 'New project', new_project_path, :class => 'arrow_link' %>
+<%end%>
+
+</fieldset>
+
+<% content_for(:breadcrumb) do %>
+  <% breadcrumb_box do %>
+    <%= link_to "项目部署一览表", projects_path %>
+  <% end %>
+<% end %>
+
+<% content_for(:page_title) do %>
+  <% @page_title = "Projects" %>
+  <h2>Projects</h2>
+<% end %>

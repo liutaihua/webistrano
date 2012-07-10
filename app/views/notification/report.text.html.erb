@@ -18,7 +18,7 @@
 </tr>
   <% @depsum.each_with_index do |deployment,index| %>
       <tr <%= index % 2 == 0 ? 'bgcolor="#E6E6E6"' : 'bgcolor="#FFFFFF"' %>>
-        <td><%= deployment.login %></td>
+        <td><%= deployment.nick || deployment.login %></td>
         <td><%= deployment.cnt %></td>
       </tr>
 <% end %>
@@ -34,7 +34,7 @@
   <% @deployments.each_with_index do |deployment,index| %>
       <tr <%= index % 2 == 0 ? 'bgcolor="#E6E6E6"' : 'bgcolor="#FFFFFF"' %>>
         <td><%= deployment.stage.project.name %> / <%= deployment.stage.name %></td>
-        <td><%= deployment.user.login %></td>
+        <td><%= deployment.user.nick || deployment.user.login %></td>
         <td><%= deployment.description.gsub(/\n/,'<br>') %></td>
         <td><%= deployment.completed_at.in_time_zone('Beijing').to_s(:log) rescue nil %></td>
       </tr>
@@ -42,3 +42,23 @@
     </table>
 <p>
 <br/>
+
+<p>
+
+<table style="font-size:9pt"  border="0"  cellspacing="0" cellpadding="3">
+<caption>版本部署一览表</caption>
+  <tr>
+  <td>项目</td>
+  <td>版本</td>
+  <td>部署次数</td>
+</tr>
+  <% @rtag.each do |h| %>
+      <tr bgcolor=<%= cycle('#E6E6E6','#FFFFFF')%>>
+        <td><%= h[:project] %></td>
+        <td><%= h[:rev] %></td>
+        <td><%= h[:cnt] %></td>
+      </tr>
+<% end %>
+    </table>
+<p>
+    

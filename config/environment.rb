@@ -5,6 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
+#RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
 RAILS_GEM_VERSION = '2.3.11' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
@@ -20,8 +21,8 @@ Rails::Initializer.run do |config|
   # Make sure the secret is at least 30 characters and all random, 
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
-    :key    => '_webistrano_session',
-    :secret => WebistranoConfig[:session_secret]
+    :session_key => '_webistrano_session',
+    :secret      => WebistranoConfig[:session_secret]
   }
 
   # Make Active Record use UTC-base instead of local time
@@ -35,14 +36,16 @@ Rails::Initializer.run do |config|
   config.gem 'highline', :version => '1.5.1'
   config.gem 'open4', :version => '0.9.3'
   config.gem 'syntax', :version => '1.0.0'
+  config.gem 'git', :version => '1.2.5'
 end
 
+require 'git'
 require 'open4'
 require 'capistrano/cli'
 require 'syntax/convertors/html'
 
 # delete cached stylesheet on boot in order to delete stale versions
-File.delete("#{RAILS_ROOT}/public/stylesheets/application.css") if File.exists?("#{RAILS_ROOT}/public/stylesheets/application.css")
+#File.delete("#{RAILS_ROOT}/public/stylesheets/application.css") if File.exists?("#{RAILS_ROOT}/public/stylesheets/application.css")
 
 # set default time_zone to UTC
 ENV['TZ'] = 'UTC'

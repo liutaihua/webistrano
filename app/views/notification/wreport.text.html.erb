@@ -1,0 +1,19 @@
+<p>
+
+<table style="font-size:9pt"  border="0"  cellspacing="0" cellpadding="3">
+<caption><b>版本部署(一周)表 <%= 1.week.ago.strftime('%Y-%m-%d') + ' -- ' + Time.now.strftime('%Y-%m-%d') %></b></caption>
+  <tr>
+  <td>项目</td>
+  <td>版本</td>
+  <td>部署次数</td>
+</tr>
+  <% rtag.each do |h| %>
+      <tr bgcolor=<%= cycle('#E6E6E6','#FFFFFF')%>>
+        <td><%= h[:project] %></td>
+        <td><%= h[:rev] %></td>
+        <td><%= h[:cnt] %></td>
+      </tr>
+<% end %>
+    </table>
+<p>
+    

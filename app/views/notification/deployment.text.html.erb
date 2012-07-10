@@ -50,7 +50,7 @@
   </tr>
   <tr class="l2">
     <td>部署人员:</td>
-    <td><%= @deployment.user.login %></td>
+    <td><%= @deployment.user.nick || @deployment.user.login %></td>
   </tr>
   <tr class="l1">
     <td>部署服务器:</td>

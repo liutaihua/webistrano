@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
+  include WebistranoPrivileges::ControllerExtensions
+  before_filter :setup_privileges
   include BrowserFilters
-  include ExceptionNotification::Notifiable
+  include ExceptionNotifiable
   include AuthenticatedSystem
   
   before_filter CASClient::Frameworks::Rails::Filter if WebistranoConfig[:authentication_method] == :cas
@@ -26,9 +28,12 @@ class ApplicationController < ActionController::Base
   end
   
   def load_project
-    @project = Project.find(params[:project_id])
+    @project = session[:pid] ? Project.find(session[:pid]) : nil
   end
   
+  def load_projectAll
+    Project.find(:all) ? Project.find(:all) : nil
+  end
   def load_stage
     load_project
     @stage = @project.stages.find(params[:stage_id])
@@ -39,18 +44,39 @@ class ApplicationController < ActionController::Base
   end
   
   def current_project
-    @project
+    session[:pid] ? Project.find(session[:pid]) : nil
   end
   
   def ensure_admin
     if logged_in? && current_user.admin?
       return true
     else
-      flash[:notice] = "Action not allowed"
+      flash[:notice] = NoRights
       redirect_to home_path
       return false
     end
   end
+
+  def ensure_radmin
+    if logged_in? && current_user.radmin?
+      return true
+    else
+      flash[:notice] = NoRights
+      redirect_to home_path
+      return false
+    end
+  end
+
+  def ensure_not_viewer
+    if logged_in? && !current_user.viewer?
+      return true
+    else
+      flash[:notice] = NoRights
+      redirect_to home_path
+      return false
+    end
+  end
+  
   
   def ensure_not_disabled
     if logged_in? && current_user.disabled?

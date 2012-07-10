@@ -120,6 +120,8 @@ class Role < ActiveRecord::Base
     if self.no_symlink?
       role_attr[:no_symlink] = true
     end
+    role_attr[:port] = self.ssh_port.blank? ? 22 : self.ssh_port
+    role_attr[:file] = self.host.content
     role_attr
   end
     

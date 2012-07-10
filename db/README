@@ -1,0 +1,4 @@
+解压wbis.sql.tar.bz2后
+使用wbis.sql初始化mysql数据结构即可
+set names utf8;
+source wbis.sql;

@@ -4,8 +4,6 @@ class RecipesController < ApplicationController
   # GET /recipes
   # GET /recipes.xml
   def index
-    @recipes = Recipe.find(:all)
-
     respond_to do |format|
       format.html # index.rhtml
       format.xml  { render :xml => @recipes.to_xml }
@@ -37,6 +35,7 @@ class RecipesController < ApplicationController
   # POST /recipes.xml
   def create
     @recipe = Recipe.new((params[:recipe] || {}).merge(:user_id => current_user.id))
+    @recipe.project_id = session[:pid]
 
     respond_to do |format|
       if @recipe.save

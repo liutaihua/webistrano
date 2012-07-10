@@ -10,14 +10,20 @@
 <div style="width:330px;">
   <p>
     <b>Task</b><br />
-    <%= f.text_field :task, :style => 'width:330px;' %>
+    <%= current_user.scmer? ? select_tag('deployment[task]', options_for_select(@task_list)) :  f.text_field(:task, :style => 'width:330px;') %>
   </p>
   
   <p>
     <b>Comment</b><br />
-    <%= f.text_area :description, :style => 'width:330px;height:80px;' %>
+    <%= f.text_area :description, :style => 'width:530px;height:480px;' %>
   </p>
-  
+
+<p>
+<%= check_box_tag(:revert) %>
+<%= label_tag(:revert, "Revert") %>
+</p>
+
+
   <% unless @stage.prompt_configurations.empty? %>
     <% @stage.prompt_configurations.each do |conf| %>
       <p>
@@ -29,16 +35,26 @@
   
   <!-- hidden ids of hosts to exlude -->
   <% for host in @stage.hosts.sort_by{|x| x.name} %>
-    <input style="display:none;" type="checkbox" value="<%=h host.id %>" name="deployment[excluded_host_ids][]" id="deployment_excluded_host_ids_<%=h host.id %>" <%= (@deployment.excluded_host_ids.include?(host.id) ? 'checked="checked"' : ''  rescue '')%>/></td>
+    <input style="display:none;" type="checkbox" value="<%=h host.id %>" name="deployment[excluded_host_ids][]" id="deployment_excluded_host_ids_<%=h host.id %>" <%= (@deployment.excluded_host_ids.include?(host.id) ? 'checked="checked"' : 'checked="checked"'  rescue 'checked="checked"')%>/></td>
   <% end %>
   
   <%= link_to 'Back to stage', project_stage_path(@project, @stage), :class => 'arrow_link ontheright' %>
 
   <p>
     <%= f.hidden_field :override_locking %>
-    <%= submit_tag "Start deployment" %>
+    <%= submit_tag "Start deployment" %> <input type="button" value="preview git diff" onclick="javascript:window.open('/reports/gitdiff?stage=<%= current_stage.id%>&tag=' + document.getElementById('deployment_prompt_config_tag_name').value)">
   </p>
 </div>
+<% end %>
+
+<% if current_user.scmer? %>
+<br />
+
+<fieldset class="fieldset">
+  <legend>Recent deployment history</legend>
+  <%= render(:partial => 'stages/deployments')%>
+</fieldset>
+
 <% end %>
 
 <% content_for(:page_scripts) do %>
@@ -98,10 +114,10 @@
                 <td width="1%" style="padding:3px 0px 0px 0px;" valign="middle" align="center">
                   <%= image_tag('peritor_theme/checkbox_on.gif', 
                                 :id => "host_#{host.id}_on", 
-                                :style => if_disabled_host?(host,'display:none;') + 'cursor:pointer;')%>
+                                :style => 'display:none;' + 'cursor:pointer;')%>
                   <%= image_tag('peritor_theme/checkbox_off.gif', 
                                 :id => "host_#{host.id}_off", 
-                                :style => if_enabled_host?(host,'display:none;') + 'cursor:pointer;')%>
+                                :style => 'cursor:pointer;')%>
                 </td>
                 <td width="99%" title="<%=h h(host.name) %>" class="toggle_host" id="toggle_host_<%=h host.id %>">
                   <div style="overflow: hidden; padding-left: 5px; width: 180px; white-space: nowrap; cursor: pointer;"><%=h host.name %></div>

@@ -1,43 +1,58 @@
-<div class="special_box">
-  <div class="special_box_top"></div>
-  <div class="special_box_middle stages_box">
-    <% if @project.stages.count > 0 %>
-      <p><strong>Choose a stage:</strong></p>
-      <% for stage in @project.stages %>
-          <p><%= link_to h(stage.name), project_stage_path(@project, stage), :class => 'arrow_link'  %></p>
-      <% end %>
-    <% else %>  
-      <p><strong>No stage configured yet</strong></p>
-      <%= link_to 'New stage', new_project_stage_path(@project), :class => 'arrow_link' %>
+<div class="special_box stages_box">
+  <% if @project.stages.count > 0 %>
+    <p><strong>Choose a stage:</strong></p>
+    <% for stage in @project.stages %>
+        <p><%= link_to h(stage.name), project_stage_path(@project, stage), :class => 'arrow_link'  %></p>
     <% end %>
-  </div>
-  <div class="special_box_bottom"></div>
+  <% else %>  
+    <p><strong>No stage configured yet</strong></p>
+    <%= link_to 'New stage', new_project_stage_path(@project), :class => 'arrow_link' %>
+  <% end %>
 </div>
 
-<div class="box">
-  <div class="box_top"></div>
-  <div class="box_middle">
-		<p>
-		<b>Description:</b>
-		  <%=h @project.description %>
-		</p>
-		<p>
-		  <b>Project Type:</b>
-		  <%=h @project.template %>
-		</p>
-		<p>
-    <b>#Deployments:</b>
-	  <%=h @project.deployments.count %>
- 		</p><br />
-  	<%= link_to 'Edit project', edit_project_path(@project), :class => 'arrow_link' %> | 
-	  <%= link_to 'Clone project', clone_form_path(@project), :class => 'arrow_link' %> | 
- 		<%= link_to 'Delete project', project_path(@project), :confirm => 'Are you sure?', :method => :delete, :class => 'arrow_link' %>
+<div style="float: left; width:380px;">
+  <div class="box_top_left">
+    <div class="box_top_right">
+      <div class="box_top">
+    </div>
+    </div>
   </div>
-  <div class="box_bottom"></div>
+  <div class="box_body" style="min-height: 123px;">
+    <div>
+    <p>
+    <b>Description:</b>
+      <%=h @project.description %>
+    </p>
+    <p>
+      <b>Project Type:</b>
+      <%=h @project.template %>
+    </p>
+    <p>
+      <b>#Deployments:</b>
+      <%=h @project.deployments.count %>
+    </p><br />
+    <%= link_to 'Edit Project', edit_project_path(@project), :class => 'arrow_link' %> | 
+    <%= link_to 'Delete', project_path(@project), :confirm => 'Are you sure?', :method => :delete, :class => 'arrow_link' %>
+  </div>  
+  </div>
+  <div class="box_bottom_left">
+    <div class="box_bottom_right">
+      <div class="box_bottom">  
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="clear"></div>
-<br>
+<br />
+
+<fieldset class="fieldset">
+  <legend>项目运维:</legend>
+  <%= render(:partial => 'users')%>
+  <br />
+</fieldset>
+
+<br />
 
 <fieldset class="fieldset">
   <legend>Project configuration</legend>
@@ -55,13 +70,7 @@
   <%= link_to 'New stage', new_project_stage_path(@project), :class => 'arrow_link' %>
 </fieldset>
 
-<br /><br />
-
-<fieldset class="fieldset">
-  <legend>Recent Deployments</legend>
-  <%= render(:partial => 'deployments')%>
-  <br />
-</fieldset>
+<br />
 
 <% content_for(:breadcrumb) do %>
   <% breadcrumb_box do %>

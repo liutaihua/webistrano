@@ -1,3 +1,4 @@
+<% cache do %>
 <div id="lists_open_content" style="<%=h show_if_opened(status) %>">
 	<% prjs = current_user.radmin? ? Project.all : current_user.projects %>
   <% if prjs.length > 0 %>
@@ -19,3 +20,4 @@
 	  </div>
   </a>
 </div>
+<% end %>

@@ -1,0 +1,87 @@
+<style>
+    table {
+        border: 1px solid #000000;
+        border-collapse: collapse;
+    }
+
+    tr, td {
+        border: 1px solid #000000;
+    }
+    table.my, table.my tr, table.my td {border:0}
+</style>
+
+
+<table style="font-size:9pt" border="0" cellspacing="0" cellpadding="3" width="100%">
+  <caption><h2>版本部署(一周)表 _____ <%= 1.week.ago.strftime('%Y-%m-%d') + ' -- ' + Time.now.strftime('%Y-%m-%d') %></h2></caption>
+  <% @rtag.each do |k, v| %>
+      <tr  bgcolor=<%= cycle('#E6E6E6', '#FFFFFF', :name=>'f2') %>>
+        <td><b><%= k %></b></td>
+        <td> 
+        <% if v.values.is_a?Array  then %>
+        <% v.values.each do |h| %>
+        <% if h[:pcnt] then%>
+        <%= h[:pcnt] %>
+        <% end %>
+        <% end %>
+        <% end %>
+        <td>
+          <table style="font-size:9pt" border="0" cellspacing="0" cellpadding="3" class="my" width="100%">
+  <!--          <tr>
+              <td>项目</td>
+              <td>版本</td>
+              <td>部署次数</td>
+            </tr>-->
+            <% v.values.each do |h| %>
+                <tr bgcolor=<%= cycle('#E6E6E6', '#FFFFFF', :name=>'f1') %>>
+                  <td width="30%"><%= h[:project] %></td>
+                  <td width="10%"><%= h[:pcnt] %></td>
+                  <td width="70%">
+                    <table style="font-size:9pt" border="0" cellspacing="0" cellpadding="3" class="my" width="100%">
+                      <% if h[:revs].is_a?Hash  then %>
+                      <%= h[:revs].each { |k, v| puts "<tr  bgcolor=#{cycle('#E6E6E6', '#FFFFFF', :name=>'fr31')}><td width=80% >#{k}</td><td width=20% > #{v} </td></tr>" } %>
+                      <% end %>
+                    </table>
+                  </td>
+                </tr>
+            <% end %>
+
+
+          </table>
+
+        </td>
+      </tr>
+
+  <% end %>
+</table>
+<p>
+
+<p>
+
+<table style="font-size:9pt" border="0" cellspacing="0" cellpadding="3">
+  <caption><b>版本部署(一周)表 _____ <%= 1.week.ago.strftime('%Y-%m-%d') + ' -- ' + Time.now.strftime('%Y-%m-%d') %></b></caption>
+  <% @rtag.each do |k, v| %>
+      <tr>
+        <td colspan="3" align="center"><b><%= "产品：#{k} 部署小" %></b></td>
+      </tr>
+      <tr>
+        <td>项目</td>
+        <td>版本</td>
+        <td>部署次数</td>
+      </tr>
+      <% v.values.each do |h| %>
+          <tr bgcolor=<%= cycle('#E6E6E6', '#FFFFFF') %>>
+            <td><%= h[:project] %></td>
+            <td><%= h[:pcnt] %></td>
+            <td>
+                      <% if h[:revs].is_a?Hash  then %>
+              <ul><%= h[:revs].each { |k, v| puts "<li>#{k}<#{v}></li>" } %></ul>
+                      <% end %>
+            </td>
+          </tr>
+      <% end %>
+  <% end %>
+</table>
+<p>
+
+
+

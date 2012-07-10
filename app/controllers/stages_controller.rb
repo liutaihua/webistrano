@@ -1,6 +1,7 @@
 class StagesController < ApplicationController
 
   before_filter :load_project
+  before_filter :ensure_admin, :except => :show
   
   # GET /projects/1/stages.xml
   def index
@@ -16,6 +17,8 @@ class StagesController < ApplicationController
     @stage = current_project.stages.find(params[:id])
     @task_list = [['All tasks: ', '']] + @stage.list_tasks.collect{|task| [task[:name], task[:name]]}.sort()
 
+    return redirect_to "#{new_project_stage_deployment_path(current_project, @stage)}" if current_user.scmer?
+
     respond_to do |format|
       format.html # show.rhtml
       format.xml  { render :xml => @stage.to_xml }
@@ -29,7 +32,13 @@ class StagesController < ApplicationController
 
   # GET /projects/1/stages/1;edit
   def edit
-    @stage = current_project.stages.find(params[:id])
+      if !current_user.admin?
+       flash[:error] = "Permission denied"
+       redirect_to :back  
+       return 0
+      end
+      @stage = current_project.stages.find(params[:id])
+      
   end
   
   # GET /projects/1/stages/1/tasks
@@ -47,6 +56,12 @@ class StagesController < ApplicationController
   # POST /projects/1/stages
   # POST /projects/1/stages.xml
   def create
+      if !current_user.admin?
+       flash[:error] = "Permission denied"
+       redirect_to :back  
+       return 0
+      end
+
     @stage = current_project.stages.build(params[:stage])
 
     respond_to do |format|
@@ -64,6 +79,12 @@ class StagesController < ApplicationController
   # PUT /projects/1/stages/1
   # PUT /projects/1/stages/1.xml
   def update
+      if !current_user.admin?
+       flash[:error] = "Permission denied"
+       redirect_to :back  
+       return 0
+      end
+
     @stage = current_project.stages.find(params[:id])
     
     respond_to do |format|
@@ -81,6 +102,12 @@ class StagesController < ApplicationController
   # DELETE /projects/1/stages/1
   # DELETE /projects/1/stages/1.xml
   def destroy
+      if !current_user.admin?
+       flash[:error] = "Permission denied"
+       redirect_to :back  
+       return 0
+      end
+
     @stage = current_project.stages.find(params[:id])
     @stage.destroy
 
@@ -117,5 +144,13 @@ class StagesController < ApplicationController
       end
     end
   end
+
+   def check
+      if !current_user.admin?
+       flash[:error] = "Permission denied"
+       redirect_to :back  
+       return 0
+      end
+   end
   
 end

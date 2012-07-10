@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :ensure_admin, :only => [:new, :destroy, :create, :enable]
-  before_filter :ensure_admin_or_my_entry, :only => [:edit, :update]
+  before_filter :ensure_radmin, :only => [:new, :destroy, :create, :enable]
+  before_filter :ensure_radmin_or_my_entry, :only => [:edit, :update]
 
   # GET /users
   # GET /users.xml
@@ -119,6 +119,16 @@ class UsersController < ApplicationController
   protected
   def ensure_admin_or_my_entry
     if current_user.admin? || current_user.id == User.find(params[:id]).id
+      return true
+    else
+      redirect_to home_url
+      return false
+    end
+  end
+
+  protected
+  def ensure_radmin_or_my_entry
+    if current_user.radmin? || current_user.id == User.find(params[:id]).id
       return true
     else
       redirect_to home_url

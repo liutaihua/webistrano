@@ -1,3 +1,4 @@
+dsfasfadsfadf
 Webistrano - Capistrano deployment the easy way
 
 
@@ -44,3 +45,6 @@ Author:
 License: 
   Code: BSD, see LICENSE.txt
   Images: Right to use in their provided form in Webistrano installations. No other right granted.
+
+Debug:
+ruby script/server -p 3000 -e production

@@ -54,8 +54,15 @@ module Capistrano
         roles[which] ||= Role.new
 
         roles[which].push(block, options) if block_given?
+#        myfn = "/var/ipfiles/#{options[:file]}"
+        if f = options[:file]
+          args =  f.split.map {|c| c.strip}.reject{|x|x[0].chr == '#' || x.length < 8}
+          options.delete :file
+        end
+
         args.each { |host| roles[which] << ServerDefinition.new(host, options) }
       end
+
 
       # An alternative way to associate servers with roles. If you have a server
       # that participates in multiple roles, this can be a DRYer way to describe
