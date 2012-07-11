@@ -44,7 +44,7 @@ ActionController::Routing::Routes.draw do |map|
       stages.resources :stage_configurations
       stages.resources :roles
       stages.resources :deployments, :collection => {:latest => :get, :scm_create => :get, :scm_deploy => :get}, :member => {:cancel => :post}
-      stages.resources :showlog # :collection => {:showlog => :get} , :controller=>"deploymentlogs"
+      stages.resources :showlog #, :collection => {:showlog => :get} , :controller=>"deploymentlogs"
     end
   end
   
