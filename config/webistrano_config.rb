@@ -15,11 +15,11 @@ WebistranoConfig = {
   :smtp_delivery_method => :smtp,
   
   :smtp_settings => {
-    :address  => "mail.snda.com",
+    :address  => "your.smtp.com",
     :port  => 25, 
-    :domain  => "snda.com",
-    :user_name  => "ptwarn",
-    :password  => "8ikju76yh",
+    :domain  => "smtp.com",
+    :user_name  => "your_smtp_username",
+    :password  => "your_smtp_passwd",
     :authentication  => :login
   },
   
@@ -27,8 +27,8 @@ WebistranoConfig = {
   :webistrano_sender_address => "webistrano@snda.com",
   
   # Sender and recipient for Webistrano exceptions
-  :exception_recipients => "liujiangnan@snda.com",
-  :exception_sender_address => "liujiangnan@snda.com"
+  :exception_recipients => "defage@gmail.com",
+  :exception_sender_address => "defage@gmail.com"
 
 }
 
@@ -36,7 +36,7 @@ MyCfg = {
   :git_server => 'repo.op.sdo.com',
   :no_rights => '权限不足，禁止操作!',
   :rsync_root => '/var/grepos/',
-  :email_grp => %w{zhoukeze@snda.com caojie@snda.com},
+  :email_grp => %w{defage@gmail.com defage@163.com},
   :per_page => 10,
   :recent => 6,
   :debug => false,
