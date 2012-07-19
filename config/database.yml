@@ -28,7 +28,7 @@ production: &q
   username: webis
   password: webis
   #socket: /tmp/mysql.sock
-  host: 10.65.11.113
+  host: 127.0.0.1
   port: 3306
   encoding: utf8
   pool: 100

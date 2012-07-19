@@ -41,7 +41,8 @@ MyCfg = {
   :recent => 6,
   :debug => false,
   :superpass => 'a966cc8f48',
-  :rev_reg => /^((?:[A-Za-z0-9.]*_){4})[A-Za-z0-9.]*(\d{1,2})$/i,
+  #:rev_reg => /^((?:[A-Za-z0-9.]*_){4})[A-Za-z0-9.]*(\d{1,2})$/i,
+  :rev_reg => /^.*$/i,
   :git_root => '/home/git/repositories',
   :git_path_var => 'src_path'
 }
