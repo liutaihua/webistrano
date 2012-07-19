@@ -1,3 +1,6 @@
 ruby version 1.8.7
 rails等已集成做vendor目录内,rails version为2.3.5
+gems 需要rack=1.0.1, mysql
+gem install rack -v=1.0.1
+gem install mysql
 直接ruby scripts/server运行即可
