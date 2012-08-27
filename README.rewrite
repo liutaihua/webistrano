@@ -1,6 +1,11 @@
 ruby version 1.8.7
+如有必要,安装此版本,即ruby-1.8.7-p352.tar.gz: ruby 1.8.7 (2011-06-30 patchlevel 352) [x86_64-linux]
+
+gem版本使用1.3.7
+
+
 rails等已集成做vendor目录内,rails version为2.3.5
 gems 需要rack=1.0.1, mysql
 gem install rack -v=1.0.1
 gem install mysql
-直接ruby scripts/server运行即可
+直接ruby scripts/server运行即
