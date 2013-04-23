@@ -3,6 +3,7 @@ class DeploymentsController < ApplicationController
   before_filter :load_stage, :except => [:scm_deploy]
   before_filter :ensure_deployment_possible, :only => [:new, :create]
   before_filter :ensure_not_viewer , :except => [:index, :show]
+  #skip_before_filter :verify_authenticity_token  
 
   # GET /projects/1/stages/1/deployments
   # GET /projects/1/stages/1/deployments.xml
@@ -50,7 +51,7 @@ class DeploymentsController < ApplicationController
   def create
      logger.error("create ....begin");
     @deployment = Deployment.new
-    
+   
     respond_to do |format|
 	
       if populate_deployment_and_fire

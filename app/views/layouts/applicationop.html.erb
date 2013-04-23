@@ -16,9 +16,9 @@
 <body>
   <div id="app_top">
     <div id="header">
-      <div id="header_claim">安全运维中心--应用运维部--版本、自动化部署--
+      <div id="header_claim">自动化部署--
      <% if logged_in? %>
-       <%= current_user.scmer? ? '配管' : '运维'%>人员--( <%= link_to h(current_user.nick || current_user.login), user_path(current_user) %> | <%= link_to 'Logout', logout_path %> )
+       <%= current_user.scmer? ? '配管' : 'User:'%>( <%= link_to h(current_user.nick || current_user.login), user_path(current_user) %> | <%= link_to 'Logout', logout_path %> )
       <% end %>
 			</div>
       <a href="<%= home_path %>"><%= image_tag('peritor_theme/webistrano_logo.gif', :border => '0')%></a>

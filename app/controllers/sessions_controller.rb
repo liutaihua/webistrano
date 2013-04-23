@@ -2,6 +2,7 @@
 class SessionsController < ApplicationController
   
   skip_before_filter :login_required, :except => :version
+  #skip_before_filter :verify_authenticity_token  
   
   # render new.rhtml
   def new
